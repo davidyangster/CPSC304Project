@@ -16,6 +16,15 @@ public class FrontEnd {
     private JFormattedTextField trainTablesFormattedTextField;
 
     public FrontEnd() {
+        panel1 = new JPanel();
+        insertButton = new JButton("INSERT");
+        deleteButton = new JButton("DELETE");
+        updateButton = new JButton("UPDATE");
+        selectButton = new JButton("SELECT");
+        projectAttributesButton = new JButton("ATTRIBUTES");
+        joinButton = new JButton("JOIN");
+        findCountButton = new JButton("COUNT");
+        divideButton = new JButton("DIVIDE");
         insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,6 +73,14 @@ public class FrontEnd {
 
             }
         });
+        panel1.add(insertButton);
+        panel1.add(deleteButton);
+        panel1.add(updateButton);
+        panel1.add(selectButton);
+        panel1.add(projectAttributesButton);
+        panel1.add(joinButton);
+        panel1.add(findCountButton);
+        panel1.add(divideButton);
     }
 
     public static void main(String[] args) {
