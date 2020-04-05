@@ -17,6 +17,7 @@ CREATE TABLE Ticket_book_status(
   book_status char(100) NOT NULL,
   PRIMARY KEY(ticket_no, pid),
   FOREIGN KEY (ticket_no, pid) REFERENCES Ticket(ticket_no, pid)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Ticket_Seat (
@@ -24,8 +25,10 @@ CREATE TABLE Ticket_Seat (
     row_ int NO NULL,
     seat_no int NOT NULL,
     train_id int NOT NULL,
-    PRIMARY KEY(ticket_no),
+    PRIMARY KEY(ticket_no, row_, seat_no, train_id),
     UNIQUE(row_, seat_no),
+    UNIQUE (ticket_no),
+    FOREIGN KEY (ticket_no) REFERENCES Ticket(ticket_no),
     FOREIGN KEY (train_id) REFERENCES Train(train_id),
     FOREIGN KEY (row_, seat_no, train_id) REFERENCES Seat(row_, seat_no, train_id),
 )
@@ -36,6 +39,7 @@ CREATE TABLE Ticket (
   class char(100) NOT NULL,
   PRIMARY KEY(ticket_no),
   FOREIGN KEY (pid) REFERENCES Passenger(pid),
+    ON DELETE CASCADE ON UPDATE CASCADE
   FOREIGN KEY (class) REFERENCES Class(class)
 )
 
