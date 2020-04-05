@@ -1,0 +1,17 @@
+DROP TABLE Passenger;
+DROP TABLE Class;
+DROP TABLE Ticket_book_status;
+DROP TABLE Ticket_Seat;
+DROP TABLE Ticket;
+DROP TABLE Train_Status;
+DROP TABLE Train;
+DROP TABLE Seat;
+DROP TABLE First_Class;
+DROP TABLE Economy;
+DROP TABLE Route_name;
+DROP TABLE Route_Details;
+DROP TABLE Station_On_Route;
+DROP TABLE Train_Operates_On_Route;
+DROP TABLE Station;
+DROP TABLE Arrives;
+DROP TABLE Departs;
