@@ -349,7 +349,7 @@ public class DatabaseConnectionHandler implements Queries{
 				for (int i =0; i<rows && rs.next(); i++) {
 					result[i][0] = String.valueOf(rs.getInt(1));
 					result[i][1] = String.valueOf(rs.getInt(2));
-					result[i][3] = rs.getString(3);
+					result[i][2] = rs.getString(3);
 				}
 
 				rs.close();
