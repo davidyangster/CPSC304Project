@@ -5,6 +5,8 @@ import controller.QueryResult;
 import javax.swing.*;
 
 public interface TrainSystemDelegate {
+    void start();
+
     QueryResult createPassenger(String pid, String firstName, String lastName);
 
     /** handleBuyTicket is overloaded for buying economy or firstclass tickets */
@@ -33,6 +35,6 @@ public interface TrainSystemDelegate {
     JTable aggregate();
 
     JTable nested_aggregation();
-    
+
     JTable divide();
 }

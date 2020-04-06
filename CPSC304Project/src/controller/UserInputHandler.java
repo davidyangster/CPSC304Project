@@ -21,6 +21,12 @@ public class UserInputHandler implements TrainSystemDelegate {
         }
         return instance;
     }
+
+    @Override
+    public void start() {
+        //boolean didConnect = databaseDelegate.login(username, password);
+    }
+
     @Override
     public QueryResult createPassenger(String pid, String firstName, String lastName) {
         if (!checkIsValidInt(pid) || !checkIsValidString(firstName) || !checkIsValidString(lastName)) {
@@ -58,24 +64,6 @@ public class UserInputHandler implements TrainSystemDelegate {
         Ticket_Seat ticketSeat = new Ticket_Seat(ticketNumber, rowInt, seatInt, trainIdInt);
         return databaseDelegate.assignSeats(ticketSeat);
     }
-
-//    @Override
-//    public QueryResult buyTickets(String pid, String seatClass, String trainId,
-//                                  String row_, String seat_no, String drink, String food, String entertainment) {
-//
-//        if (!checkIsValidInt(pid) || !checkIsValidString(seatClass) || !checkIsValidInt(trainId)
-//                || !checkIsValidString(drink) || !checkIsValidString(food) || !checkIsValidString(entertainment)
-//                || !checkIsValidInt(row_) || !checkIsValidInt(seat_no)) {
-//            return new QueryResult(false, "Please make sure all inputs are in correct format");
-//        }
-//
-//        int pidInt = Integer.parseInt(pid);
-//        int trainIdInt = Integer.parseInt(trainId);
-//        int rowInt = Integer.parseInt(row_);
-//        int seatInt = Integer.parseInt(seat_no);
-//        //put parameters into database connection
-//        return new QueryResult(true,"");
-//    }
 
     @Override
     public QueryResult deletePassenger(String pid) {
@@ -144,6 +132,16 @@ public class UserInputHandler implements TrainSystemDelegate {
     @Override
     public JTable aggregate() {
         return databaseDelegate.agg();
+    }
+
+    @Override
+    public JTable nested_aggregation() {
+        return databaseDelegate.nested_agg();
+    }
+
+    @Override
+    public JTable divide() {
+        return databaseDelegate.div();
     }
 
     private boolean checkIsValidInt(String toCheck) {
