@@ -23,5 +23,7 @@ public interface Queries {
 	// Takes a string of either "economy" or "first class"
 	public JTable show_by_class(String class_);
 	public JTable proj_status(String [] cols);
+	public JTable join();
+	public JTable agg();
 	
 }
