@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -254,7 +255,7 @@ public class DatabaseConnectionHandler implements Queries{
 		@Override
 		public QueryResult delete_all_tickets() {
 			try {
-				PreparedStatement ps = connection.prepareStatement("DELETE FROM Ticket;");
+				PreparedStatement ps = connection.prepareStatement("DELETE FROM Ticket");
 				
 				ps.executeUpdate();
 				
@@ -267,6 +268,50 @@ public class DatabaseConnectionHandler implements Queries{
 				rollbackConnection();
 				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
 			}
+		}
+		
+		@Override
+		public String[][] show_by_class(String class_) {
+			String[][] result = new String[0][];
+			
+			try {
+				PreparedStatement ps = connection.prepareStatement("SELECT *"+
+						"FROM Ticket WHERE class = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+				ps.setString(1, class_);
+				
+				ResultSet rs = ps.executeQuery();
+				
+				
+	    		ResultSetMetaData rsmd = rs.getMetaData();
+	    		
+	    		rs.last();
+				int rows = rs.getRow();
+				int columns = rsmd.getColumnCount();
+	    		
+	    		result = new String [rows][columns];
+	    		
+	    		System.out.println(" ");
+	
+	    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+	    			// get column name 
+	    			result[0][i] = rsmd.getColumnName(i + 1);
+	    		}
+	    		
+				rs.first();
+				
+				for (int i =0; i<rows && rs.next(); i++) {
+					result[i][0] = String.valueOf(rs.getInt(1));
+					result[i][1] = String.valueOf(rs.getInt(2));
+					result[i][3] = rs.getString(3);
+				}
+
+				rs.close();
+				ps.close();
+			} catch (SQLException e) {
+				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			}	
+			
+			return result;
 		}
 		
 
@@ -390,6 +435,8 @@ public class DatabaseConnectionHandler implements Queries{
 		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
 		insertBranch(branch2);
 	}
+
+
 
 
 }
