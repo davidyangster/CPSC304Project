@@ -317,6 +317,61 @@ public class DatabaseConnectionHandler implements Queries{
 			return table;
 		}
 		
+		@Override
+		public JTable proj_status(String [] cols){
+			String[][] result = null;
+			JTable table = null;
+			try {
+				
+				StringBuffer statement = new StringBuffer("SELECT");
+				for(int  i =0; i<cols.length;i++){
+				if (i==0){statement.append(" ?"); continue;}
+				statement.append(", ?");
+				}
+				
+				PreparedStatement ps = connection.prepareStatement(statement.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+				
+				for(int  i =0; i<cols.length;i++){
+					ps.setString(i, cols[i]);
+					}
+				
+				
+				ResultSet rs = ps.executeQuery();
+				
+				
+	    		ResultSetMetaData rsmd = rs.getMetaData();
+	    		
+	    		rs.last();
+				int rows = rs.getRow();
+				int columns = rsmd.getColumnCount();
+	    		
+	    		result = new String [rows][columns];
+	    		String[] headers = new String[columns];
+	    		System.out.println(" ");
+	
+	    		for (int i = 0; i < columns; i++) {
+	    			// get column name 
+	    			headers[i] = rsmd.getColumnName(i + 1);
+	    		}
+	    		
+				rs.first();
+				
+				for (int i =0; i<rows && rs.next(); i++) {
+					for(int j=0;j <columns; j++){
+						result[i][j] = rs.getString(j);
+					}
+				}
+
+				rs.close();
+				ps.close();
+				table = new JTable(result, headers);
+			} catch (SQLException e) {
+				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			}	
+			
+			return table;
+		}
+		
 
 	
 	public BranchModel[] getBranchInfo() {
