@@ -2,21 +2,27 @@ package delegates;
 
 import controller.QueryResult;
 
+import javax.swing.*;
+
 public interface TrainSystemDelegate {
-    QueryResult handleCreateUser(String pid, String firstName, String lastName);
+    QueryResult createPassenger(String pid, String firstName, String lastName);
 
     /** handleBuyTicket is overloaded for buying economy or firstclass tickets */
-    QueryResult handleBuyTicket(String pid, String seatClass, String trainId, String row_, String seat_no);
+    QueryResult buyTickets(String pid, String seatClass, String trainId, String row_, String seat_no);
 
-    QueryResult handleBuyTicket(String pid, String seatClass, String trainId,
-                                String row_, String seat_no, String drink, String food, String entertainment);
 
-    QueryResult deleteUser(String pid);
+    QueryResult deletePassenger(String pid);
 
     QueryResult deleteTicket(String ticket_no);
 
-    QueryResult updateStatus(String ticket_no, String pid, String status);
+    QueryResult deleteAllTickets();
 
-    QueryResult showAllUsers();
+    QueryResult updateBookStatus(String ticket_no, String pid, String status);
+
+    QueryResult showAllPassengers();
+
+    JTable showPassengersByClass(String class_);
+
+    JTable projectStatus(String[] columns);
 
 }
