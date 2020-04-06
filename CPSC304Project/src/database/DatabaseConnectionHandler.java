@@ -278,7 +278,7 @@ public class DatabaseConnectionHandler implements Queries{
 			JTable table = null;
 			try {
 				PreparedStatement ps = connection.prepareStatement("SELECT *"+
-						"FROM Ticket WHERE class = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+						" FROM Ticket WHERE class = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 				ps.setString(1, class_);
 				
 				ResultSet rs = ps.executeQuery();
@@ -328,7 +328,7 @@ public class DatabaseConnectionHandler implements Queries{
 				if (i==0){statement.append(" ?"); continue;}
 				statement.append(", ?");
 				}
-				
+				statement.append(" FROM Train_Status");
 				PreparedStatement ps = connection.prepareStatement(statement.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 				
 				for(int  i =0; i<cols.length;i++){
@@ -378,8 +378,8 @@ public class DatabaseConnectionHandler implements Queries{
 			JTable table = null;
 			try {
 				String join = "SELECT p.pid, p.last_name, p.first_name "
-						+ "FROM Passenger p, Ticket t, Ticket_Seat ts, Train_Operates_On_Route tr, Route_name rn, Route_Details rd"
-						+ "Where p.pid = t.pid AND t.ticket_no = ts.ticket_no AND ts.train_id = tr.train_id AND"
+						+ "FROM Passenger p, Ticket t, Ticket_Seat ts, Train_Operates_On_Route tr, Route_name rn, Route_Details rd "
+						+ "Where p.pid = t.pid AND t.ticket_no = ts.ticket_no AND ts.train_id = tr.train_id AND "
 						+ "tr.route_id = rn.route_id AND rn.route_name = rd.route_name AND rd.start_station_name = rd.start_station_name";
 				PreparedStatement ps = connection.prepareStatement(join, ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 
@@ -426,10 +426,10 @@ public class DatabaseConnectionHandler implements Queries{
 			JTable table = null;
 			try {
 				String nested_agg = "SELECT rn.route_name, COUNT(*) "
-						+ "FROM Ticket t, Ticket_Seat ts, Train_Operates_On_Route tr, Route_name rn, Route_Details rd"
-						+ "Where t.ticket_no = ts.ticket_no AND ts.train_id = tr.train_id AND"
-						+ "tr.route_id = rn.route_id AND rn.route_name = rd.route_name"
-						+ "Group By rn.route";
+						+ "FROM Ticket t, Ticket_Seat ts, Train_Operates_On_Route tr, Route_name rn, Route_Details rd "
+						+ "Where t.ticket_no = ts.ticket_no AND ts.train_id = tr.train_id AND "
+						+ "tr.route_id = rn.route_id AND rn.route_name = rd.route_name "
+						+ "Group By rn.route_name";
 				PreparedStatement ps = connection.prepareStatement(nested_agg, ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 
 				
@@ -467,8 +467,7 @@ public class DatabaseConnectionHandler implements Queries{
 			
 			return table;
 		}
-
-		@Override
+		
 		public JTable agg() {
 			String[][] result = null;
 			JTable table = null;
@@ -518,10 +517,13 @@ public class DatabaseConnectionHandler implements Queries{
 			JTable table = null;
 			try {
 				String div = "SELECT p.first_name, p.last_name "
-						+ "FROM Passenger p"
-						+ "Where NOT EXISTS ("
-						+ "(SELECT c.class FROM Class c)"
-						+ "EXCEPT (SELECT t.class FROM Ticket t WHERE p.pid=t.pid))";
+						+ "FROM Passenger p "
+						+ "Where NOT EXISTS "
+						+ "(SELECT c.class FROM Class c "
+						+ "WHERE NOT EXISTS "
+						+ "(SELECT t.pid "
+						+ "FROM Ticket t "
+						+ "WHERE t.class = c.class AND p.pid = t.pid))";
 				PreparedStatement ps = connection.prepareStatement(div, ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 
 				
@@ -680,7 +682,6 @@ public class DatabaseConnectionHandler implements Queries{
 		insertBranch(branch2);
 	}
 
-	@Override
 	public JTable getTickets() {
 		String[][] result = null;
 		JTable table = null;
@@ -722,8 +723,7 @@ public class DatabaseConnectionHandler implements Queries{
 		
 		return table;
 	}
-
-	@Override
+	
 	public JTable getTicket_book_status() {
 		String[][] result = null;
 		JTable table = null;
