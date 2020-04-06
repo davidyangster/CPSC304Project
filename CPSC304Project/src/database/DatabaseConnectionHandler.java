@@ -579,7 +579,9 @@ public class DatabaseConnectionHandler implements Queries{
 		}	
 	}
 	
-	public boolean login(String username, String password) {
+	public boolean login() {
+		String username = "ora_mazen44@stu";
+		String password = "a95885976";
 		try {
 			if (connection != null) {
 				connection.close();
