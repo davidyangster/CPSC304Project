@@ -510,6 +510,54 @@ public class DatabaseConnectionHandler implements Queries{
 			
 			return table;
 		}
+		
+		@Override
+		public JTable div() {
+			String[][] result = null;
+			JTable table = null;
+			try {
+				String div = "SELECT p.first_name, p.last_name "
+						+ "FROM Passenger p"
+						+ "Where NOT EXISTS ("
+						+ "(SELECT c.class FROM Class c)"
+						+ "EXCEPT (SELECT t.class FROM Ticket t WHERE p.pid=t.pid))";
+				PreparedStatement ps = connection.prepareStatement(div, ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+
+				
+				ResultSet rs = ps.executeQuery();
+				
+				
+	    		ResultSetMetaData rsmd = rs.getMetaData();
+	    		
+	    		rs.last();
+				int rows = rs.getRow();
+				int columns = rsmd.getColumnCount();
+	    		
+	    		result = new String [rows][columns];
+	    		String[] headers = new String[columns];
+	    		System.out.println(" ");
+	
+	    		for (int i = 0; i < columns; i++) {
+	    			// get column name 
+	    			headers[i] = rsmd.getColumnName(i + 1);
+	    		}
+	    		
+				rs.first();
+				
+				for (int i =0; i<rows && rs.next(); i++) {
+					result[i][0] = rs.getString(1);
+					result[i][1] = rs.getString(2);
+				}
+
+				rs.close();
+				ps.close();
+				table = new JTable(result, headers);
+			} catch (SQLException e) {
+				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			}	
+			
+			return table;
+		}
 	
 	public BranchModel[] getBranchInfo() {
 		ArrayList<BranchModel> result = new ArrayList<BranchModel>();
