@@ -65,7 +65,7 @@ public class FrontEnd {
                 //}
                 String s = (String)JOptionPane.showInputDialog(
                         mainFrame,
-                        "Select Table", "Customized Dialogue",
+                        "Select Table", "Choose Table For Insert",
                         JOptionPane.PLAIN_MESSAGE, null, tables, null);
                 if (s == "Ticket") {
                     //TODO: input ticket adding function
@@ -92,7 +92,7 @@ public class FrontEnd {
                     myPanel.add(seatNoField);
 
                     int result = JOptionPane.showConfirmDialog(null, myPanel,
-                            "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+                            "Please Enter Ticket Tuple Values", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
                         QueryResult thisOne = ourQuery.buyTickets(pidField.getText(), classField.getText(), trainIdField.getText(), rowField.getText(), seatNoField.getText());
                         if (!thisOne.success) {
@@ -116,7 +116,7 @@ public class FrontEnd {
                     myPanel.add(lastNameField);
 
                     int result = JOptionPane.showConfirmDialog(null, myPanel,
-                            "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+                            "Please Enter Passenger Values", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
                         String pid = pidField.getText();
                         String firstName = firstNameField.getText();
@@ -137,7 +137,7 @@ public class FrontEnd {
             public void actionPerformed(ActionEvent e) {
                 String s = (String)JOptionPane.showInputDialog(
                         mainFrame,
-                        "Select Table", "Customized Dialogue",
+                        "Select Table", "Choose Table to Delete From",
                         JOptionPane.PLAIN_MESSAGE, null, tables, null);
                 if (s == "Ticket") {
                     //TODO: input ticket adding function
@@ -148,7 +148,7 @@ public class FrontEnd {
                     myPanel.add(ticketNoField);
 
                     int result = JOptionPane.showConfirmDialog(null, myPanel,
-                            "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+                            "Please Enter Ticket Primary Key", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
                         //TODO: implement finding the tuple with this primary key and deleting it
                         ourQuery.deleteTicket(ticketNoField.getText());
@@ -168,7 +168,7 @@ public class FrontEnd {
                     myPanel.add(pidField);
 
                     int result = JOptionPane.showConfirmDialog(null, myPanel,
-                            "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+                            "Please Enter Passenger Primary Key", JOptionPane.OK_CANCEL_OPTION);
                     if (result == JOptionPane.OK_OPTION) {
                         //TODO: implement finding the tuple with this primary key and deleting it
                         QueryResult thisOne = ourQuery.deletePassenger(pidField.getText());
@@ -185,7 +185,7 @@ public class FrontEnd {
                 String[] newTables = {"Ticket_book_status"};
                 String s = (String)JOptionPane.showInputDialog(
                         mainFrame,
-                        "Select Table", "Customized Dialogue",
+                        "Select Table", "Choose Table to Update",
                         JOptionPane.PLAIN_MESSAGE, null, newTables, null);
                 if (s == "Ticket_book_status") {
                     JTextField ticketNoField = new JTextField(7);
@@ -199,7 +199,7 @@ public class FrontEnd {
                     myPanel.add(pidField);
 
                     int result = JOptionPane.showConfirmDialog(null, myPanel,
-                            "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+                            "Enter TicketBookStatus Primary Keys", JOptionPane.OK_CANCEL_OPTION);
                     String[] bookStatus = {"booked", "cancelled"};
                     String status = (String)JOptionPane.showInputDialog(
                             mainFrame,
@@ -225,7 +225,7 @@ public class FrontEnd {
                 String[] newTable ={"Economy", "First Class"};
                 String s = (String)JOptionPane.showInputDialog(
                         mainFrame,
-                        "Select Table", "Customized Dialogue",
+                        "Select Table", "Enter Selected Class attribute",
                         JOptionPane.PLAIN_MESSAGE, null, newTable, null);
                 JTable tempTable;
                 if (s == "Economy") {
