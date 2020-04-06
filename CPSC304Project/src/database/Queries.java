@@ -1,6 +1,8 @@
 package database;
 
+import controller.QueryResult;
 import model.*;
+
 
 public interface Queries {
 
@@ -8,13 +10,13 @@ public interface Queries {
 	public void setupDB();
 	
 	// Returns String with either success or error msg
-	public String addPassenger(Passenger passenger); //insert passenger
-	public String buyTicket(Ticket ticket); // insert ticket
-	public String assignSeats(Ticket_Seat ts);
-	public String update_book_status(Ticket_Book_Status tbs);
-	public String deletePass (int Pid);
-	public String deleteTicket(int ticket_no);
-	public String delete_all_tickets();
+	public QueryResult addPassenger(Passenger passenger); //insert passenger
+	public QueryResult buyTicket(Ticket ticket); // insert ticket
+	public QueryResult assignSeats(Ticket_Seat ts);
+	public QueryResult update_book_status(Ticket_Book_Status tbs);
+	public QueryResult deletePass (int Pid);
+	public QueryResult deleteTicket(int ticket_no);
+	public QueryResult delete_all_tickets();
 	
 	
 }
