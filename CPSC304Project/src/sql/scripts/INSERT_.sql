@@ -5,9 +5,9 @@ INSERT INTO Passenger VALUES (3,'Chiu','Clarence');
 INSERT INTO Class VALUES ('first class',100);
 INSERT INTO Class VALUES ('economy',50);
 
-INSERT INTO Ticket VALUES (11,1,'First');
-INSERT INTO Ticket VALUES (22,2,'Economy');
-INSERT INTO Ticket VALUES (33,3,'Economy');
+INSERT INTO Ticket VALUES (11,1,'first class');
+INSERT INTO Ticket VALUES (22,2,'economy');
+INSERT INTO Ticket VALUES (33,3,'economy');
 
 INSERT INTO Ticket_book_status VALUES (11,1,'unsuccessful');
 INSERT INTO Ticket_book_status VALUES (22,2,'unsuccessful');
@@ -32,7 +32,7 @@ INSERT INTO Ticket_Seat VALUES (11,23,1,101);
 INSERT INTO Ticket_Seat VALUES (22,24,2,202);
 INSERT INTO Ticket_Seat VALUES (33,52,3,303);
 
-INSERT INTO First_Class VALUES (23,1,'pizza','coke','TV');
+INSERT INTO First_Class VALUES (23,1,101,'pizza','coke','TV');
 
 INSERT INTO Economy VALUES (24,2,202);
 INSERT INTO Economy VALUES (52,3,303);
@@ -51,20 +51,19 @@ INSERT INTO Route_name VALUES (2020,'Expo Line');
 INSERT INTO Station_On_Route VALUES (1010,'Brighouse Station','Richmond Center');
 INSERT INTO Station_On_Route VALUES (1010,'Waterfront Station','Waterfront Center');
 INSERT INTO Station_On_Route VALUES (2020,'Waterfront Station','Waterfront Center');
-INSERT INTO Station_On_Route VALUES (2020,'King George Station','King George');
+INSERT INTO Station_On_Route VALUES (2020,'King George Station','King George Center');
 
 INSERT INTO Train_Operates_On_Route VALUES (101,1010);
 INSERT INTO Train_Operates_On_Route VALUES (202,1010);
 INSERT INTO Train_Operates_On_Route VALUES (303,2020);
 INSERT INTO Train_Operates_On_Route VALUES (404,2020);
 
-INSERT INTO Arrives VALUES (101,'Brighouse Station','Richmond Center',2020-04-05 07:00:00,2020-04-05 07:05:00);
-INSERT INTO Arrives VALUES (202,'Waterfront Station','Waterfront Center',2020-04-05 07:01:00,2020-04-05 07:00:00);
-INSERT INTO Arrives VALUES (303,'King George Station','King George',2020-04-05 19:00:00,2020-04-05 19:01:00);
-INSERT INTO Arrives VALUES (404,'Brighouse Station','Richmond Center',2020-04-05 07:10:00,2020-04-05 07:10:00);
+INSERT INTO Arrives VALUES (101,'Brighouse Station','Richmond Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO Arrives VALUES (202,'Waterfront Station','Waterfront Center', TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO Arrives VALUES (303,'King George Station','King George Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO Arrives VALUES (404,'Brighouse Station','Richmond Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
 
-INSERT INTO Departs VALUES (101,'Brighouse Station','Richmond Center',2020-04-05 07:06:00,2020-04-05 07:07:00);
-INSERT INTO Departs VALUES (202,'Waterfront Station','Waterfront Center',2020-04-05 07:02:00,2020-04-05 07:01:00);
-INSERT INTO Departs VALUES (303,'King George Station','King George',2020-04-05 19:02:00,2020-04-05 19:03:00);
-INSERT INTO Departs VALUES (404,'Brighouse Station','Richmond Center',2020-04-05 07:11:00,2020-04-05 07:11:00);
-
+INSERT INTO Departs VALUES (101,'Brighouse Station','Richmond Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO Departs VALUES (202,'Waterfront Station','Waterfront Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO Departs VALUES (303,'King George Station','King George Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO Departs VALUES (404,'Brighouse Station','Richmond Center',TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('2020-04-05 07:00:00', 'YYYY-MM-DD HH24:MI:SS'));

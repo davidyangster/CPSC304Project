@@ -1,12 +1,12 @@
 CREATE TABLE Passenger(
   pid int NOT NULL,
-  last_name char(100) NOT NULL,
-  first_name char(100) NOT NULL,
+  last_name char(25) NOT NULL,
+  first_name char(25) NOT NULL,
   PRIMARY KEY (pid)
 );
 
 CREATE TABLE Class(
-  class char(100) NOT NULL,
+  class char(25) NOT NULL,
   price int NOT NULL,
   PRIMARY KEY(class),
   Check (price >=0)
@@ -15,7 +15,7 @@ CREATE TABLE Class(
 CREATE TABLE Ticket (
   ticket_no int NOT NULL,
   pid int NOT NULL,
-  class char(100) NOT NULL,
+  class char(25) NOT NULL,
   PRIMARY KEY(ticket_no),
   FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE,
   FOREIGN KEY (class) REFERENCES Class(class)
@@ -24,7 +24,7 @@ CREATE TABLE Ticket (
 CREATE TABLE Ticket_book_status(
   ticket_no int NOT NULL,
   pid int NOT NULL,
-  book_status char(100) NOT NULL,
+  book_status char(25) NOT NULL,
   PRIMARY KEY(ticket_no),
   FOREIGN KEY (ticket_no) REFERENCES Ticket(ticket_no) ON DELETE CASCADE,
   FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE
@@ -43,8 +43,8 @@ CREATE TABLE Train_Status(
 
 CREATE TABLE Train(
   train_id int NOT NULL,
-  train_type char(100) NOT NULL,
-  train_name char(100) NOT NULL,
+  train_type char(25) NOT NULL,
+  train_name char(25) NOT NULL,
   status_id int NOT NULL,
   PRIMARY KEY(train_id),
   UNIQUE(status_id),
@@ -81,9 +81,9 @@ CREATE TABLE First_Class(
   row_ int NOT NULL,
   seat_no int NOT NULL,
   train_id int NOT NULL,
-  meal_option char(100),
-  drink_option char(100),
-  entertainment char(100),
+  meal_option char(25),
+  drink_option char(25),
+  entertainment char(25),
   PRIMARY KEY(row_, seat_no, train_id),
   FOREIGN KEY (row_, seat_no, train_id) REFERENCES Seat(row_, seat_no, train_id)
 );
@@ -97,17 +97,17 @@ CREATE TABLE Economy(
 );
 
 CREATE TABLE Station(
-  station_name char(100) NOT NULL,
-  location char(100) NOT NULL,
+  station_name char(25) NOT NULL,
+  location char(25) NOT NULL,
   PRIMARY KEY(station_name, location)
 );
 
 CREATE TABLE Route_Details(
-  route_name char(100) NOT NULL,
-  start_station_name char(100) NOT NULL,
-  start_station_location char(100) NOT NULL,
-  end_station_name char(100) NOT NULL,
-  end_station_location char(100) NOT NULL,
+  route_name char(25) NOT NULL,
+  start_station_name char(25) NOT NULL,
+  start_station_location char(25) NOT NULL,
+  end_station_name char(25) NOT NULL,
+  end_station_location char(25) NOT NULL,
   UNIQUE (start_station_location, end_station_location),
   PRIMARY KEY(route_name),
   FOREIGN KEY (start_station_name, start_station_location)
@@ -118,15 +118,15 @@ CREATE TABLE Route_Details(
 
 CREATE TABLE Route_name(
   route_id int NOT NULL,
-  route_name char(100) NOT NULL,
+  route_name char(25) NOT NULL,
   PRIMARY KEY(route_id),
   FOREIGN KEY (route_name) REFERENCES Route_Details(route_name)
 );
 
 CREATE TABLE Station_On_Route(
   route_id int NOT NULL,
-  station_name char(100) NOT NULL,
-  location char(100) NOT NULL,
+  station_name char(25) NOT NULL,
+  location char(25) NOT NULL,
   PRIMARY KEY(route_id, station_name,location),
   FOREIGN KEY (route_id) REFERENCES Route_name(route_id),
   FOREIGN KEY (station_name, location) REFERENCES Station(station_name, location)
@@ -143,8 +143,8 @@ CREATE TABLE Train_Operates_On_Route(
 
 CREATE TABLE Arrives(
   train_id int NOT NULL,
-  station_name char(100) NOT NULL,
-  location char(100) NOT NULL,
+  station_name char(25) NOT NULL,
+  location char(25) NOT NULL,
   sched_time timestamp NOT NULL,
   actual_time timestamp NOT NULL,
   PRIMARY KEY(train_id, station_name, location),
@@ -154,8 +154,8 @@ CREATE TABLE Arrives(
 
 CREATE TABLE Departs(
   train_id int NOT NULL,
-  station_name char(100) NOT NULL,
-  location char(100) NOT NULL,
+  station_name char(25) NOT NULL,
+  location char(25) NOT NULL,
   sched_time timestamp NOT NULL,
   actual_time timestamp NOT NULL,
   PRIMARY KEY(train_id, station_name, location),
