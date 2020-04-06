@@ -8,8 +8,7 @@ import model.*;
 
 public interface Queries {
 
-	
-	public void setupDB();
+
 	
 	// Returns String with either success or error msg
 	public QueryResult addPassenger(Passenger passenger); //insert passenger
@@ -24,10 +23,7 @@ public interface Queries {
 	public JTable show_by_class(String class_);
 	public JTable proj_status(String [] cols);
 	public JTable join();
-	public JTable agg();
 	public JTable nested_agg();
 	public JTable div();
-	public JTable getTickets();
-	public JTable getTicket_book_status();
 	
 }
