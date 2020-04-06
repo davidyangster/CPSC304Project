@@ -1,5 +1,7 @@
 package database;
 
+import javax.swing.JTable;
+
 import controller.QueryResult;
 import model.*;
 
@@ -19,6 +21,6 @@ public interface Queries {
 	public QueryResult delete_all_tickets();
 	
 	// Takes a string of either "economy" or "first class"
-	public Object[][] show_by_class(String class_);
+	public JTable show_by_class(String class_);
 	
 }
