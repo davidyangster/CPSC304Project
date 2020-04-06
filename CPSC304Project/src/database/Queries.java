@@ -28,5 +28,6 @@ public interface Queries {
 	public JTable div();
 	public JTable getTickets();
 	public JTable getTicket_book_status();
+	public boolean login();
 
 }
