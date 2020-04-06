@@ -18,5 +18,7 @@ public interface Queries {
 	public QueryResult deleteTicket(int ticket_no);
 	public QueryResult delete_all_tickets();
 	
+	// Takes a string of either "economy" or "first class"
+	public Object[][] show_by_class(String class_);
 	
 }
