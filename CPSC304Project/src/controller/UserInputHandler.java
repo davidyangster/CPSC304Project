@@ -123,17 +123,27 @@ public class UserInputHandler implements TrainSystemDelegate {
 
     @Override
     public JTable getPassengerInfo() {
-        return databaseDelegate.;
+        return null;
     }
 
     @Override
     public JTable getTicketTable() {
-        return null;
+        return databaseDelegate.getTickets();
     }
 
     @Override
     public JTable getTickBookStatusTable() {
-        return null;
+        return databaseDelegate.getTicket_book_status();
+    }
+
+    @Override
+    public JTable join() {
+        return databaseDelegate.join();
+    }
+
+    @Override
+    public JTable aggregate() {
+        return databaseDelegate.agg();
     }
 
     private boolean checkIsValidInt(String toCheck) {

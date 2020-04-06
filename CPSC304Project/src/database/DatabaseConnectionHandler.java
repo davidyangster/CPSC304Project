@@ -467,7 +467,8 @@ public class DatabaseConnectionHandler implements Queries{
 			
 			return table;
 		}
-		
+
+		@Override
 		public JTable agg() {
 			String[][] result = null;
 			JTable table = null;
@@ -679,6 +680,7 @@ public class DatabaseConnectionHandler implements Queries{
 		insertBranch(branch2);
 	}
 
+	@Override
 	public JTable getTickets() {
 		String[][] result = null;
 		JTable table = null;
@@ -720,7 +722,8 @@ public class DatabaseConnectionHandler implements Queries{
 		
 		return table;
 	}
-	
+
+	@Override
 	public JTable getTicket_book_status() {
 		String[][] result = null;
 		JTable table = null;

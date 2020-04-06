@@ -32,5 +32,7 @@ public interface TrainSystemDelegate {
 
     JTable aggregate();
 
-
+    JTable nested_aggregation();
+    
+    JTable divide();
 }

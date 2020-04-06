@@ -25,5 +25,9 @@ public interface Queries {
 	public JTable proj_status(String [] cols);
 	public JTable join();
 	public JTable agg();
+	public JTable nested_agg();
+	public JTable div();
+	public JTable getTickets();
+	public JTable getTicket_book_status();
 	
 }
