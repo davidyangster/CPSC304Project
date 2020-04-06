@@ -406,8 +406,56 @@ public class DatabaseConnectionHandler implements Queries{
 				
 				for (int i =0; i<rows && rs.next(); i++) {
 					result[i][0] = String.valueOf(rs.getInt(1));
-					result[i][1] = String.valueOf(rs.getInt(2));
+					result[i][1] = rs.getString(2);
 					result[i][2] = rs.getString(3);
+				}
+
+				rs.close();
+				ps.close();
+				table = new JTable(result, headers);
+			} catch (SQLException e) {
+				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			}	
+			
+			return table;
+		}
+		
+		@Override
+		public JTable agg() {
+			String[][] result = null;
+			JTable table = null;
+			try {
+				String join = "SELECT rn.route_name, COUNT(*) "
+						+ "FROM Ticket t, Ticket_Seat ts, Train_Operates_On_Route tr, Route_name rn, Route_Details rd"
+						+ "Where t.ticket_no = ts.ticket_no AND ts.train_id = tr.train_id AND"
+						+ "tr.route_id = rn.route_id AND rn.route_name = rd.route_name"
+						+ "Group By rn.route";
+				PreparedStatement ps = connection.prepareStatement(join, ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+
+				
+				ResultSet rs = ps.executeQuery();
+				
+				
+	    		ResultSetMetaData rsmd = rs.getMetaData();
+	    		
+	    		rs.last();
+				int rows = rs.getRow();
+				int columns = rsmd.getColumnCount();
+	    		
+	    		result = new String [rows][columns];
+	    		String[] headers = new String[columns];
+	    		System.out.println(" ");
+	
+	    		for (int i = 0; i < columns; i++) {
+	    			// get column name 
+	    			headers[i] = rsmd.getColumnName(i + 1);
+	    		}
+	    		
+				rs.first();
+				
+				for (int i =0; i<rows && rs.next(); i++) {
+					result[i][0] = rs.getString(1);
+					result[i][1] = String.valueOf(rs.getInt(2));
 				}
 
 				rs.close();
