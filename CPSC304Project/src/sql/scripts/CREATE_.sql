@@ -17,7 +17,7 @@ CREATE TABLE Ticket (
   pid int NOT NULL,
   class char(100) NOT NULL,
   PRIMARY KEY(ticket_no),
-  FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE,
   FOREIGN KEY (class) REFERENCES Class(class)
 );
 
