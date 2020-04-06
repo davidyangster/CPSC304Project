@@ -439,7 +439,7 @@ public class DatabaseConnectionHandler implements Queries{
 		insertBranch(branch2);
 	}
 
-	public JTable getTickets()) {
+	public JTable getTickets() {
 		String[][] result = null;
 		JTable table = null;
 		try {
