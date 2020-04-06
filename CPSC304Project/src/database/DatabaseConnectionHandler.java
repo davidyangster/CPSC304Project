@@ -82,9 +82,7 @@ public class DatabaseConnectionHandler implements Queries{
 
 			ps.close();
 		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.
-					   
-					   Message());
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 			rollbackConnection();
 		}
 	}
@@ -301,52 +299,7 @@ public class DatabaseConnectionHandler implements Queries{
 	    		
 				rs.first();
 				
-				for (int i =0; i<rows && rs.next(); i++) {
-					result[i][0] = String.valueOf(rs.getInt(1));
-					result[i][1] = String.valueOf(rs.getInt(2));
-					result[i][3] = rs.getString(3);
-				}
-
-				rs.close();
-				ps.close();
-			} catch (SQLException e) {
-				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			}	
-			
-			return result;
-		}
-		
-
-	@Override
-		public String[][] show_by_class(String class_) {
-			String[][] result = new String[0][];
-			
-			try {
-				PreparedStatement ps = connection.prepareStatement("SELECT *"+
-						"FROM Ticket WHERE class = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-				ps.setString(1, class_);
-				
-				ResultSet rs = ps.executeQuery();
-				
-				
-	    		ResultSetMetaData rsmd = rs.getMetaData();
-	    		
-	    		rs.last();
-				int rows = rs.getRow();
-				int columns = rsmd.getColumnCount();
-	    		
-	    		result = new String [rows][columns];
-	    		
-	    		System.out.println(" ");
-	
-	    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
-	    			// get column name 
-	    			result[0][i] = rsmd.getColumnName(i + 1);
-	    		}
-	    		
-				rs.first();
-				
-				for (int i =0; i<rows && rs.next(); i++) {
+				for (int i =1; i<=rows && rs.next(); i++) {
 					result[i][0] = String.valueOf(rs.getInt(1));
 					result[i][1] = String.valueOf(rs.getInt(2));
 					result[i][2] = rs.getString(3);
@@ -360,6 +313,8 @@ public class DatabaseConnectionHandler implements Queries{
 			
 			return result;
 		}
+		
+
 	
 	public BranchModel[] getBranchInfo() {
 		ArrayList<BranchModel> result = new ArrayList<BranchModel>();
@@ -481,6 +436,89 @@ public class DatabaseConnectionHandler implements Queries{
 		insertBranch(branch2);
 	}
 
+	public String[][] get_Tickets() {
+		String[][] result = new String[0][];
+		
+		try {
+			PreparedStatement ps = connection.prepareStatement("SELECT *"+
+					"FROM Ticket", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			
+    		ResultSetMetaData rsmd = rs.getMetaData();
+    		
+    		rs.last();
+			int rows = rs.getRow();
+			int columns = rsmd.getColumnCount();
+    		
+    		result = new String [rows][columns];
+    		
+    		System.out.println(" ");
+
+    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    			// get column name 
+    			result[0][i] = rsmd.getColumnName(i + 1);
+    		}
+    		
+			rs.first();
+			
+			for (int i =1; i<=rows && rs.next(); i++) {
+				result[i][0] = String.valueOf(rs.getInt(1));
+				result[i][1] = String.valueOf(rs.getInt(2));
+				result[i][2] = rs.getString(3);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}	
+		
+		return result;
+	}
+	
+	public String[][] get_Ticket_book_status() {
+		String[][] result = new String[0][];
+		
+		try {
+			PreparedStatement ps = connection.prepareStatement("SELECT *"+
+					"FROM Ticket_book_status", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			
+    		ResultSetMetaData rsmd = rs.getMetaData();
+    		
+    		rs.last();
+			int rows = rs.getRow();
+			int columns = rsmd.getColumnCount();
+    		
+    		result = new String [rows][columns];
+    		
+    		System.out.println(" ");
+
+    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    			// get column name 
+    			result[0][i] = rsmd.getColumnName(i + 1);
+    		}
+    		
+			rs.first();
+			
+			for (int i =1; i<=rows && rs.next(); i++) {
+				result[i][0] = String.valueOf(rs.getInt(1));
+				result[i][1] = String.valueOf(rs.getInt(2));
+				result[i][2] = rs.getString(3);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}	
+		
+		return result;
+	}
 
 
 
