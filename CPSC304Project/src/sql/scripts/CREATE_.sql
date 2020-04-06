@@ -26,7 +26,7 @@ CREATE TABLE Ticket_book_status(
   pid int NOT NULL,
   book_status char(100) NOT NULL,
   PRIMARY KEY(ticket_no),
-  FOREIGN KEY (ticket_no) REFERENCES Ticket(ticket_no) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (ticket_no) REFERENCES Ticket(ticket_no) ON DELETE CASCADE 
 );
 
 CREATE TABLE Train_Status(
