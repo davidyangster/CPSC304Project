@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JTable;
+
 import controller.QueryResult;
 import model.*;
 
@@ -271,9 +273,9 @@ public class DatabaseConnectionHandler implements Queries{
 		}
 		
 		@Override
-		public String[][] show_by_class(String class_) {
-			String[][] result = new String[0][];
-			
+		public JTable show_by_class(String class_) {
+			String[][] result = null;
+			JTable table = null;
 			try {
 				PreparedStatement ps = connection.prepareStatement("SELECT *"+
 						"FROM Ticket WHERE class = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -289,17 +291,17 @@ public class DatabaseConnectionHandler implements Queries{
 				int columns = rsmd.getColumnCount();
 	    		
 	    		result = new String [rows][columns];
-	    		
+	    		String[] headers = new String[columns];
 	    		System.out.println(" ");
 	
-	    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+	    		for (int i = 0; i < columns; i++) {
 	    			// get column name 
-	    			result[0][i] = rsmd.getColumnName(i + 1);
+	    			headers[i] = rsmd.getColumnName(i + 1);
 	    		}
 	    		
 				rs.first();
 				
-				for (int i =1; i<=rows && rs.next(); i++) {
+				for (int i =0; i<rows && rs.next(); i++) {
 					result[i][0] = String.valueOf(rs.getInt(1));
 					result[i][1] = String.valueOf(rs.getInt(2));
 					result[i][2] = rs.getString(3);
@@ -307,11 +309,12 @@ public class DatabaseConnectionHandler implements Queries{
 
 				rs.close();
 				ps.close();
+				table = new JTable(result, headers);
 			} catch (SQLException e) {
 				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 			}	
 			
-			return result;
+			return table;
 		}
 		
 
@@ -436,12 +439,11 @@ public class DatabaseConnectionHandler implements Queries{
 		insertBranch(branch2);
 	}
 
-	public String[][] get_Tickets() {
-		String[][] result = new String[0][];
-		
+	public JTable getTickets()) {
+		String[][] result = null;
+		JTable table = null;
 		try {
-			PreparedStatement ps = connection.prepareStatement("SELECT *"+
-					"FROM Ticket", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			PreparedStatement ps = connection.prepareStatement("SELECT *"+"FROM Ticket", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -453,17 +455,17 @@ public class DatabaseConnectionHandler implements Queries{
 			int columns = rsmd.getColumnCount();
     		
     		result = new String [rows][columns];
-    		
+    		String[] headers = new String[columns];
     		System.out.println(" ");
 
-    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    		for (int i = 0; i < columns; i++) {
     			// get column name 
-    			result[0][i] = rsmd.getColumnName(i + 1);
+    			headers[i] = rsmd.getColumnName(i + 1);
     		}
     		
 			rs.first();
 			
-			for (int i =1; i<=rows && rs.next(); i++) {
+			for (int i =0; i<rows && rs.next(); i++) {
 				result[i][0] = String.valueOf(rs.getInt(1));
 				result[i][1] = String.valueOf(rs.getInt(2));
 				result[i][2] = rs.getString(3);
@@ -471,16 +473,17 @@ public class DatabaseConnectionHandler implements Queries{
 
 			rs.close();
 			ps.close();
+			table = new JTable(result, headers);
 		} catch (SQLException e) {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}	
 		
-		return result;
+		return table;
 	}
 	
-	public String[][] get_Ticket_book_status() {
-		String[][] result = new String[0][];
-		
+	public JTable getTicket_book_status() {
+		String[][] result = null;
+		JTable table = null;
 		try {
 			PreparedStatement ps = connection.prepareStatement("SELECT *"+
 					"FROM Ticket_book_status", ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -495,17 +498,17 @@ public class DatabaseConnectionHandler implements Queries{
 			int columns = rsmd.getColumnCount();
     		
     		result = new String [rows][columns];
-    		
+    		String[] headers = new String[columns];
     		System.out.println(" ");
 
-    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    		for (int i = 0; i < columns; i++) {
     			// get column name 
-    			result[0][i] = rsmd.getColumnName(i + 1);
+    			headers[i] = rsmd.getColumnName(i + 1);
     		}
     		
 			rs.first();
 			
-			for (int i =1; i<=rows && rs.next(); i++) {
+			for (int i =0; i<rows && rs.next(); i++) {
 				result[i][0] = String.valueOf(rs.getInt(1));
 				result[i][1] = String.valueOf(rs.getInt(2));
 				result[i][2] = rs.getString(3);
@@ -513,11 +516,12 @@ public class DatabaseConnectionHandler implements Queries{
 
 			rs.close();
 			ps.close();
+			table = new JTable(result, headers);
 		} catch (SQLException e) {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}	
 		
-		return result;
+		return table;
 	}
 
 
