@@ -8,12 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import controller.QueryResult;
 import model.*;
 
 /**
  * This class handles all database related transactions
  */
-public class DatabaseConnectionHandler {
+public class DatabaseConnectionHandler implements Queries{
 	// Use this version of the ORACLE_URL if you are running the code off of the server
 //	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
 	// Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
@@ -86,7 +87,7 @@ public class DatabaseConnectionHandler {
 	}
 	
 	// Query 1: Insert Passenger
-	public void addPassenger(Passenger passenger) {
+	public QueryResult addPassenger(Passenger passenger) {
 		try {
 			PreparedStatement ps = connection.prepareStatement("INSERT INTO Passenger VALUES (?,?,?)");
 			ps.setInt(1, passenger.getPid());
@@ -96,14 +97,15 @@ public class DatabaseConnectionHandler {
 			connection.commit();
 
 			ps.close();
+			return new QueryResult(true,"success");
 		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 			rollbackConnection();
+			return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
 		}
 	}
 	
 	// Query 2: Buy Ticket
-		public void buyTicket(Ticket ticket) {
+		public QueryResult buyTicket(Ticket ticket) {
 			try {
 				PreparedStatement ps = connection.prepareStatement("INSERT INTO Ticket VALUES (?,?,?)");
 				ps.setInt(1, ticket.getTicket_no());
@@ -111,13 +113,163 @@ public class DatabaseConnectionHandler {
 				ps.setString(3, ticket.getClass_());
 				ps.executeUpdate();
 				connection.commit();
-
+				
+				set_Book_Status(ticket);
+				
 				ps.close();
+				return new QueryResult(true,"success");
 			} catch (SQLException e) {
-				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 				rollbackConnection();
+				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
 			}
 		}
+		
+		//Insert in Book
+		public void set_Book_Status(Ticket ticket){
+			try {
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO Ticket_book_status VALUES (?,?,?)");
+			
+				ps.setInt(1, ticket.getTicket_no());
+				ps.setInt(2, ticket.getPid());
+				ps.setString(3, "Pending");
+				ps.executeUpdate();
+				connection.commit();
+				
+				ps.close();
+			} catch (SQLException e) {
+				rollbackConnection();
+				System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			}
+		}
+		
+		@Override
+		public QueryResult assignSeats(Ticket_Seat ts) {
+			try {
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO Ticket_Seat VALUES (?,?,?,?)");
+				ps.setInt(1, ts.getTicket_no());
+				ps.setInt(2, ts.getRow());
+				ps.setInt(3, ts.getSeat_no());
+				ps.setInt(4, ts.getTrain_id());
+				ps.executeUpdate();
+				connection.commit();
+				
+				ps = connection.prepareStatement("UPDATE Train_Status SET waitlist = waitlist + 1 WHERE avail_seats = 0"
+						+ "AND status_id IN (SELECT T.status_id FROM Train T WHERE train_id = ?");
+				ps.setInt(1, ts.getTrain_id());
+				ps.executeUpdate();
+				connection.commit();
+				
+				ps = connection.prepareStatement("UPDATE Train_Status SET booked_seats = max_seats WHERE booked_seats = max_seats - 1"
+						+ "AND status_id IN (SELECT T.status_id FROM Train T WHERE train_id = ?");
+				ps.setInt(1, ts.getTrain_id());
+				ps.executeUpdate();
+				connection.commit();
+				
+				ps = connection.prepareStatement("UPDATE Train_Status SET booked_seats = booked_seats + 1 WHERE booked_seats < max_seats"
+						+ "AND status_id IN (SELECT T.status_id FROM Train T WHERE train_id = ?");
+				ps.setInt(1, ts.getTrain_id());
+				ps.executeUpdate();
+				connection.commit();
+				
+				ps = connection.prepareStatement("UPDATE Train_Status SET avail_seats = avail_seats - 1 WHERE avail_seats > 0"
+						+ "AND status_id IN (SELECT T.status_id FROM Train T WHERE train_id = ?");
+				ps.setInt(1, ts.getTrain_id());
+				ps.executeUpdate();
+				
+				
+				connection.commit();
+				
+				ps.close();
+				return new QueryResult(true,"success");
+			} catch (SQLException e) {
+				rollbackConnection();
+				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
+			}
+		}
+
+		@Override
+		public QueryResult update_book_status(Ticket_Book_Status tbs) {
+			try {
+				PreparedStatement ps = connection.prepareStatement("Update Ticket_book_status SET book_status = ? WHERE ticket_no = ? AND pid = ?");
+			
+				ps.setString(1, tbs.getBook_status());
+				ps.setInt(2, tbs.getTicket_no());
+				ps.setInt(3, tbs.getPid());
+				
+				ps.executeUpdate();
+				connection.commit();
+				
+				ps.close();
+				return new QueryResult(true,"success");
+			} catch (SQLException e) {
+				rollbackConnection();
+				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
+			}
+		}
+
+		@Override
+		public QueryResult deletePass(int pid) {
+			try {
+				PreparedStatement ps = connection.prepareStatement("DELETE FROM Passenger WHERE pid = ?");
+				ps.setInt(1, pid);
+				
+				int rowCount = ps.executeUpdate();
+				
+				connection.commit();
+		
+				ps.close();
+				
+				if (rowCount == 0) {
+					return new QueryResult(false, (WARNING_TAG + " Passenger " + pid + " does not exist!"));
+				}
+				return new QueryResult(true,"success");
+			} catch (SQLException e) {
+				rollbackConnection();
+				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
+			}
+		}
+
+		@Override
+		public QueryResult deleteTicket(int ticket_no) {
+			try {
+				PreparedStatement ps = connection.prepareStatement("DELETE FROM Ticket WHERE ticket_no = ?");
+				ps.setInt(1, ticket_no);
+				
+				int rowCount = ps.executeUpdate();
+				
+				connection.commit();
+		
+				ps.close();
+				
+				if (rowCount == 0) {
+					return new QueryResult(false, (WARNING_TAG + " Ticket " + ticket_no + " does not exist!"));
+				}
+				return new QueryResult(true,"success");
+			} catch (SQLException e) {
+				rollbackConnection();
+				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
+			}
+		}
+
+		@Override
+		public QueryResult delete_all_tickets() {
+			try {
+				PreparedStatement ps = connection.prepareStatement("DELETE FROM Ticket;");
+				
+				ps.executeUpdate();
+				
+				connection.commit();
+		
+				ps.close();
+				
+				return new QueryResult(true,"success");
+			} catch (SQLException e) {
+				rollbackConnection();
+				return new QueryResult(false, (EXCEPTION_TAG + " " + e.getMessage()));
+			}
+		}
+		
+
 	
 	public BranchModel[] getBranchInfo() {
 		ArrayList<BranchModel> result = new ArrayList<BranchModel>();
@@ -199,24 +351,7 @@ public class DatabaseConnectionHandler {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 	}
-	
-	public void databaseSetup() {
-		dropBranchTableIfExists();
-		
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)");
-			stmt.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-		
-		BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
-		insertBranch(branch1);
-		
-		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
-		insertBranch(branch2);
-	}
+
 	
 	private void dropBranchTableIfExists() {
 		try {
@@ -236,4 +371,25 @@ public class DatabaseConnectionHandler {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 	}
+
+	@Override
+	public void setupDB() {
+		dropBranchTableIfExists();
+		
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate("CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)");
+			stmt.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		
+		BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
+		insertBranch(branch1);
+		
+		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
+		insertBranch(branch2);
+	}
+
+
 }
