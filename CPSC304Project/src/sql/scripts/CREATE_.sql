@@ -16,8 +16,8 @@ CREATE TABLE Ticket (
   ticket_no int NOT NULL,
   pid int NOT NULL,
   class char(100) NOT NULL,
-  PRIMARY KEY(ticket_no, pid),
-  FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE,
+  PRIMARY KEY(ticket_no),
+  FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (class) REFERENCES Class(class)
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE Ticket_book_status(
   pid int NOT NULL,
   book_status char(100) NOT NULL,
   PRIMARY KEY(ticket_no),
-  FOREIGN KEY (ticket_no) REFERENCES Ticket(ticket_no)
+  FOREIGN KEY (ticket_no) REFERENCES Ticket(ticket_no) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Train_Status(
@@ -83,7 +83,7 @@ CREATE TABLE First_Class(
   drink_option char(100),
   entertainment char(100),
   PRIMARY KEY(row_, seat_no, train_id),
-  FOREIGN KEY (row_, seat_no) REFERENCES Seat(row_, seat_no)
+  FOREIGN KEY (row_, seat_no, train_id) REFERENCES Seat(row_, seat_no, train_id)
 );
 
 CREATE TABLE Economy(
@@ -91,13 +91,13 @@ CREATE TABLE Economy(
   seat_no int NOT NULL,
   train_id int NOT NULL,
   PRIMARY KEY(row_, seat_no, train_id),
-  FOREIGN KEY (row_, seat_no) REFERENCES Seat(row_, seat_no)
+  FOREIGN KEY (row_, seat_no, train_id) REFERENCES Seat(row_, seat_no, train_id)
 );
 
 CREATE TABLE Station(
   station_name char(100) NOT NULL,
   location char(100) NOT NULL,
-  PRIMARY KEY(station_name, location),
+  PRIMARY KEY(station_name, location)
 );
 
 CREATE TABLE Route_Details(
@@ -126,7 +126,7 @@ CREATE TABLE Station_On_Route(
   station_name char(100) NOT NULL,
   location char(100) NOT NULL,
   PRIMARY KEY(route_id, station_name,location),
-  FOREIGN KEY (route_id) REFERENCES Route(route_id),
+  FOREIGN KEY (route_id) REFERENCES Route_name(route_id),
   FOREIGN KEY (station_name, location) REFERENCES Station(station_name, location)
 );
 
@@ -135,7 +135,7 @@ CREATE TABLE Train_Operates_On_Route(
   route_id int NOT NULL,
   PRIMARY KEY(train_id, route_id),
   FOREIGN KEY (train_id) REFERENCES Train(train_id),
-  FOREIGN KEY (route_id) REFERENCES Route(route_id)
+  FOREIGN KEY (route_id) REFERENCES Route_name(route_id)
 );
 
 
