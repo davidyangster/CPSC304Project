@@ -25,8 +25,9 @@ public interface TrainSystemDelegate {
 
     JTable projectStatus(String[] columns);
 
+    JTable getPassengerInfo();
+
     JTable getTicketTable();
 
     JTable getTickBookStatusTable();
-
 }
