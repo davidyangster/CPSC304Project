@@ -3,15 +3,19 @@ package controller;
 import delegates.TrainSystemDelegate;
 
 import javax.swing.*;
+import model.*;
+import database.*;
 
 public class UserInputHandler implements TrainSystemDelegate {
     public static UserInputHandler instance = null;
+    private static int ticketNumber = 0;
+    private Queries databaseDelegate;
 
     private UserInputHandler() {
-
+        databaseDelegate = new DatabaseConnectionHandler();
     }
 
-    public UserInputHandler getInstance() {
+    public static UserInputHandler getInstance() {
         if (instance == null) {
             instance = new UserInputHandler();
         }
@@ -27,9 +31,8 @@ public class UserInputHandler implements TrainSystemDelegate {
         }
 
         int pidInt = Integer.parseInt(pid);
-
-        //put parameters into database connection
-        return new QueryResult(true,"");
+        Passenger passenger = new Passenger(pidInt, lastName, firstName);
+        return databaseDelegate.addPassenger(passenger);
     }
 
     //handleBuyTicket is overloaded for buying economy or firstclass tickets
@@ -45,7 +48,15 @@ public class UserInputHandler implements TrainSystemDelegate {
         int rowInt = Integer.parseInt(row_);
         int seatInt = Integer.parseInt(seat_no);
         //put parameters into database connection
-        return new QueryResult(true,"");
+
+        Ticket tic = new Ticket(ticketNumber, seatClass, pidInt);
+        ticketNumber++;
+        QueryResult addTicketResult = databaseDelegate.buyTicket(tic);
+        if (!addTicketResult.success) {
+            return addTicketResult;
+        }
+        Ticket_Seat ticketSeat = new Ticket_Seat(ticketNumber, rowInt, seatInt, trainIdInt);
+        return databaseDelegate.assignSeats(ticketSeat);
     }
 
 //    @Override
@@ -68,36 +79,60 @@ public class UserInputHandler implements TrainSystemDelegate {
 
     @Override
     public QueryResult deletePassenger(String pid) {
-        return null;
+        if (!checkIsValidInt(pid)) {
+            return new QueryResult(false, "Please input valid passenger id");
+        }
+        int pidInt = Integer.parseInt(pid);
+        return databaseDelegate.deletePass(pidInt);
     }
 
     @Override
-    public QueryResult deleteTicket(String ticket_no) {
-        return null;
+    public QueryResult deleteTicket(String ticketNumber) {
+        if (!checkIsValidInt(ticketNumber)) {
+            return new QueryResult(false, "Please input valid ticket number");
+        }
+        int ticketNumInt = Integer.parseInt(ticketNumber);
+        return databaseDelegate.deleteTicket(ticketNumInt);
     }
 
     @Override
     public QueryResult deleteAllTickets() {
-        return null;
+        return databaseDelegate.delete_all_tickets();
     }
 
     @Override
     public QueryResult updateBookStatus(String ticket_no, String pid, String status) {
-        return null;
-    }
-
-    @Override
-    public QueryResult showAllPassengers() {
-        return null;
+        if (!checkIsValidInt(ticket_no) || !checkIsValidInt(pid) || !checkIsValidString(status)) {
+            return new QueryResult(false, "Please input valid ticket booking status info");
+        }
+        int ticketNumInt = Integer.parseInt(ticket_no);
+        int pidInt = Integer.parseInt(pid);
+        Ticket_Book_Status tbs = new Ticket_Book_Status(ticketNumInt, pidInt, status);
+        return databaseDelegate.update_book_status(tbs);
     }
 
     @Override
     public JTable showPassengersByClass(String class_) {
-        return null;
+        return databaseDelegate.show_by_class(class_);
     }
 
     @Override
     public JTable projectStatus(String[] columns) {
+        return databaseDelegate.proj_status(columns);
+    }
+
+    @Override
+    public JTable getPassengerInfo() {
+        return databaseDelegate.;
+    }
+
+    @Override
+    public JTable getTicketTable() {
+        return null;
+    }
+
+    @Override
+    public JTable getTickBookStatusTable() {
         return null;
     }
 

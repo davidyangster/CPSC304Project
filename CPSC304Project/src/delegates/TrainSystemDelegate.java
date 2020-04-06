@@ -10,7 +10,6 @@ public interface TrainSystemDelegate {
     /** handleBuyTicket is overloaded for buying economy or firstclass tickets */
     QueryResult buyTickets(String pid, String seatClass, String trainId, String row_, String seat_no);
 
-
     QueryResult deletePassenger(String pid);
 
     QueryResult deleteTicket(String ticket_no);
@@ -18,8 +17,6 @@ public interface TrainSystemDelegate {
     QueryResult deleteAllTickets();
 
     QueryResult updateBookStatus(String ticket_no, String pid, String status);
-
-    QueryResult showAllPassengers();
 
     JTable showPassengersByClass(String class_);
 
@@ -30,4 +27,10 @@ public interface TrainSystemDelegate {
     JTable getTicketTable();
 
     JTable getTickBookStatusTable();
+
+    JTable join();
+
+    JTable aggregate();
+
+
 }
