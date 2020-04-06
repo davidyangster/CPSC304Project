@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+
 import javax.swing.JTable;
 
 import controller.QueryResult;
@@ -47,47 +48,7 @@ public class DatabaseConnectionHandler implements Queries{
 		}
 	}
 
-	public void deleteBranch(int branchId) {
-		try {
-			PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-			ps.setInt(1, branchId);
-			
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
-			}
-			
-			connection.commit();
 	
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-	}
-	
-	public void insertBranch(BranchModel model) {
-		try {
-			PreparedStatement ps = connection.prepareStatement("INSERT INTO branch VALUES (?,?,?,?,?)");
-			ps.setInt(1, model.getId());
-			ps.setString(2, model.getName());
-			ps.setString(3, model.getAddress());
-			ps.setString(4, model.getCity());
-			if (model.getPhoneNumber() == 0) {
-				ps.setNull(5, java.sql.Types.INTEGER);
-			} else {
-				ps.setInt(5, model.getPhoneNumber());
-			}
-
-			ps.executeUpdate();
-			connection.commit();
-
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-	}
 	
 	// Query 1: Insert Passenger
 	public QueryResult addPassenger(Passenger passenger) {
@@ -644,43 +605,8 @@ public class DatabaseConnectionHandler implements Queries{
 	}
 
 	
-	private void dropBranchTableIfExists() {
-		try {
-			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("select table_name from user_tables");
-			
-			while(rs.next()) {
-				if(rs.getString(1).toLowerCase().equals("branch")) {
-					stmt.execute("DROP TABLE branch");
-					break;
-				}
-			}
-			
-			rs.close();
-			stmt.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-	}
-
-	@Override
-	public void setupDB() {
-		dropBranchTableIfExists();
-		
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)");
-			stmt.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-		
-		BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
-		insertBranch(branch1);
-		
-		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
-		insertBranch(branch2);
-	}
+	
+	
 
 	public JTable getTickets() {
 		String[][] result = null;
@@ -766,6 +692,8 @@ public class DatabaseConnectionHandler implements Queries{
 		
 		return table;
 	}
+
+
 
 
 
